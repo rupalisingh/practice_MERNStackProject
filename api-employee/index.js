@@ -4,7 +4,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const EmployeeModel = require("./Model/employeeModel")
 const app = express()
-app.use(express.json({limit : '50mb'}))
+app.use(express.json({ limit: '50mb' }))
 mongoose.connect('mongodb://localhost:27017/EmployeeData')
 
 
@@ -16,7 +16,7 @@ app.get('/get-employeeDetails', async function (req, res) {
 
 
 app.post('/post-employeeDetails', async function (req, res) {
-    try{
+    try {
         console.log(req.body)
         const data = ({
             EmpId: req.body.id,
@@ -25,10 +25,35 @@ app.post('/post-employeeDetails', async function (req, res) {
         })
         EmployeeModel.create(data)
         res.send(data)
-    }catch(err){
+    } catch (err) {
         res.send(err)
     }
-    
+
+})
+
+app.delete('/delete-employeeDetails', async function (req, res) {
+    try {
+        // console.log(req.body)
+        const data = await EmployeeModel.deleteOne({ EmpId: req.body.id })
+        console.log(data)
+        res.send(data)
+    } catch (err) {
+        res.send(err)
+    }
+})
+
+
+app.put('/update-employeeDetails', async function (req, res) {
+    try {
+        console.log(req.body)
+        const data = await EmployeeModel.findOneAndUpdate({ EmpId: req.body.id }, {
+            EmpName: req.body.name,
+            Designation: req.body.Designation
+        })
+        res.send(data)
+    } catch (err) {
+        res.send(err)
+    }
 })
 
 
