@@ -33,7 +33,7 @@ app.post('/post-employeeDetails', async function (req, res) {
 
 app.delete('/delete-employeeDetails', async function (req, res) {
     try {
-        // console.log(req.body)
+        console.log(req.body)
         const data = await EmployeeModel.deleteOne({ EmpId: req.body.id })
         console.log(data)
         res.send(data)

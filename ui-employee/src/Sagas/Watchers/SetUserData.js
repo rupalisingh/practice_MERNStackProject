@@ -14,7 +14,7 @@ const PostEmployeeData = async (data) => {
 function* WorkerSetID(action) {
     try {
         const data = action.payload
-        const UserData = yield call(PostEmployeeData, data)
+        yield call(PostEmployeeData, data)
         // yield put({
         //     type: SET_EMP_DATA,
         //     UserData
@@ -26,6 +26,5 @@ function* WorkerSetID(action) {
 }
 
 export default function* WatcherSetID() {
-    console.log("watcher")
     yield takeLatest(SET_EMP_DATA, WorkerSetID)
 }
