@@ -1,0 +1,14 @@
+.MuiPaper-root{
+    width: 80%;
+}
+
+.input-fields{
+    display: flex;
+    flex-direction: column;
+}
+
+.button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
