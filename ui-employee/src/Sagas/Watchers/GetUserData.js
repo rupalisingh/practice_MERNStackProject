@@ -9,9 +9,15 @@ const GetUserData = async () => {
 
 function* WorkerGetData() {
     const UserData = yield call(GetUserData)
+            const arr = UserData.map(data => {
+                 return {
+                    ...data,
+                    isEditable: false
+                }
+            })            
     yield put({
         type : GET_EMP_DATA,
-        payload : UserData
+        payload : arr
     })
 }
 

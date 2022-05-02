@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { Paper, Button, TextField } from "@mui/material"
 import '../css/InputData.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import { setEmployeeData, getEmployeeData } from "../actions"
 import TableData from './Table'
 
 
-function InpuData() {
+function InpuData(props) {
+  // console.log(props.UserData)
   const dispatch = useDispatch()
   const [empData, setEmpData] = useState({ id: null, name: null, designation: null })
 
+
   const handleSave = () => {
-    // console.log("empData", empData)
-    if(empData.id  && empData.name && empData.designation){
+    if( props.UserData.some(data => data.EmpId === Number(empData.id))){
+      alert("ID already exists")
+    }else if(empData.id  && empData.name && empData.designation){
       dispatch(setEmployeeData(empData))
       dispatch(getEmployeeData())
     }else{
       alert("Please enter all the fields")
     }
-    
   }
 
   const handleReset = () => {
@@ -42,7 +44,8 @@ function InpuData() {
 
   useEffect(() => {
     dispatch(getEmployeeData())
-  })
+    // eslint-disable-next-line
+  },[])
   return (
     <>
       <Paper elevation={3}>
@@ -50,7 +53,6 @@ function InpuData() {
           <TextField label="Employee Id" onChange={handleId} value = {empData.id} type = "Number"/>
           <TextField label="Employee Name" onChange={handleName} value = {empData.name} type = "String"/>
           <TextField label="Designation" onChange={handleDesigation} value = {empData.designation}/>
-
         </div>
         <div className='buttons'>
           <Button variant="contained" onClick={handleSave} >Save</Button>
@@ -60,8 +62,12 @@ function InpuData() {
       <TableData />
 
     </>
-
   )
 }
 
-export default InpuData
+const mapStateToProps = (state) => {
+  return { UserData: state.userdataState }
+}
+
+
+export default connect(mapStateToProps)(InpuData)

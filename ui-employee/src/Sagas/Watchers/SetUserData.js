@@ -7,7 +7,6 @@ const PostEmployeeData = async (data) => {
         id : data.id , name : data.name, Designation : data.designation
     }
     const response = await axios.post("http://localhost:8800/post-employeeDetails", body)
-    console.log(response.data)
     return response.data
 }
 
@@ -15,10 +14,6 @@ function* WorkerSetID(action) {
     try {
         const data = action.payload
         yield call(PostEmployeeData, data)
-        // yield put({
-        //     type: SET_EMP_DATA,
-        //     UserData
-        // })
     } catch (err) {
         alert(err)
     }

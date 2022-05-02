@@ -1,12 +1,12 @@
 // console.log("Hello WOrld")
-
+const cors = require('cors')
 const express = require("express")
 const mongoose = require("mongoose")
 const EmployeeModel = require("./Model/employeeModel")
 const app = express()
 app.use(express.json({ limit: '50mb' }))
 mongoose.connect('mongodb://localhost:27017/EmployeeData')
-
+app.use(cors())
 
 
 app.get('/get-employeeDetails', async function (req, res) {
@@ -33,9 +33,9 @@ app.post('/post-employeeDetails', async function (req, res) {
 
 app.delete('/delete-employeeDetails', async function (req, res) {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const data = await EmployeeModel.deleteOne({ EmpId: req.body.id })
-        console.log(data)
+        // console.log(data)
         res.send(data)
     } catch (err) {
         res.send(err)

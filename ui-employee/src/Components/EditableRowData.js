@@ -1,36 +1,63 @@
 import React, { useState } from 'react'
+import {useDispatch,connect} from 'react-redux'
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import { useDispatch } from 'react-redux'
-import {editRow} from '../actions'
+import {setEditStatus, newFieldData, getEmployeeData} from "../actions"
+
 
 function EditableRowData(props) {
+    // console.log(props)
     const dispatch = useDispatch()
-    const [isEditable, setisEditable] = useState(false)
+    const [isEditablestate, setisEditablestate] = useState(false)
+    // console.log(props.UserData)
 
-    const handleEdit = (row, UserData) => {
-        console.log(UserData)
-        dispatch(editRow(row, UserData))
-        setisEditable(true)
+
+    const editStatusUpdate = (row) => {
+        const data = props.UserData.map(user => {
+            if(user.EmpId === row.EmpId){
+                user.isEditable = !user.isEditable
+            }
+            return {
+                ...user
+            }
+        })
+        return data
     }
 
-    const handleSaveEdit = () => {
-        setisEditable(false)
+
+    const handleEdit = (row) => {
+        setisEditablestate(true)
+       const result = editStatusUpdate(row)
+        dispatch(setEditStatus(result))
+        
     }
 
-    const handleCancelEdit = () => {
-        setisEditable(false)
+    const handleSaveEdit = (row) => {
+        setisEditablestate(false)
+        // console.log(props.UserData)
+        const result = editStatusUpdate(row)
+        dispatch(setEditStatus(result))
+        dispatch(newFieldData(props.newFieldData))
+        dispatch(getEmployeeData())
+
+
+    }
+
+    const handleCancelEdit = (row) => {
+        setisEditablestate(false)
+        const result = editStatusUpdate(row)
+        dispatch(setEditStatus(result))
     }
 
 
     return (
         <>
             {
-                !isEditable ? <EditRoundedIcon onClick={() => handleEdit(props.currentRow, props.UserData)}></EditRoundedIcon> : <>
+                !isEditablestate ? <EditRoundedIcon onClick={() => handleEdit(props.currentRow)}></EditRoundedIcon> : <>
                     <div className='onEditButton'>
-                        <DoneAllIcon onClick={handleSaveEdit} />
-                        <CancelOutlinedIcon onClick={handleCancelEdit} />
+                        <DoneAllIcon onClick={() => handleSaveEdit(props.currentRow)} />
+                        <CancelOutlinedIcon onClick={() => handleCancelEdit(props.currentRow)} />
                     </div>
                 </>
             }
@@ -38,4 +65,8 @@ function EditableRowData(props) {
     )
 }
 
-export default EditableRowData
+const mapStateToProps = (state) => {
+    return {UserData : state.userdataState} 
+}
+
+export default connect(mapStateToProps)(EditableRowData)

@@ -15,16 +15,23 @@ export function getEmployeeData() {
 }
 
 export function deleteEmployeeData(payload) {
-    console.log("Payload", payload)
     return {
         type: constant.DELETE_EMP_DATA,
         payload
     }
 }
 
-export function editRow(payload){
+export function setEditStatus(payload){
     return {
-        type : constant.EDIT_ROW,
+        type : constant.GET_EMP_DATA,
+        payload
+    }
+}
+
+
+export function newFieldData(payload){
+    return {
+        type : constant.SET_EMP_NEWDATA,
         payload
     }
 }
